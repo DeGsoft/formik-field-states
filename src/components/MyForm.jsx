@@ -3,79 +3,76 @@ import { Field, Formik } from "formik";
 import * as Yup from "yup";
 import { MyInput } from "./MyInput";
 
-export const MyForm = () => (
-    <div className="my-form">
-        <h1>
-            Basic Formik Demo
-        </h1>
+/**
+ * A basic formik form
+ * @returns {JSX.Element}
+ * @constructor
+ * @see https://formik.org/docs/tutorial
+ **/
+export const MyForm = () => {
+    
+    const isNotEmpty = (value) => value != "";
 
-        <Formik
-            initialValues={{ email: "" }}
-            onSubmit={async values => {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                alert(JSON.stringify(values, null, 2));
-            }}
-            validationSchema={Yup.object().shape({
-                email: Yup.string()
-                    .email()
-                    .required("Required")
-            })}
-        >
-            {props => {
-                const {
-                    values,
-                    touched,
-                    errors,
-                    dirty,
-                    isSubmitting,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    handleReset
-                } = props;
-                return (
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor="email" style={{ display: "block" }}>
-                            Email
-                        </label>
-                        {/* <input
-                            id="email"
-                            placeholder="Enter your email"
-                            type="text"
-                            value={values.email}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            className={
-                                errors.email && touched.email
-                                    ? "text-input error"
-                                    : "text-input"
-                            }
-                        />
-                        {errors.email && touched.email && (
-                            <div className="input-feedback">{errors.email}</div>
-                        )} */}
-                       <Field
-                        name='email'
-                        component={MyInput}
-                        onChange={handleChange}
-                        value={values.email}
-                        />
+    return (
+        <div className="my-form">
+            <h1>
+                Basic Formik Demo
+            </h1>
 
-                        {(props.values.email != "") && <>
-                            <button
-                                type="button"
-                                className="outline"
-                                onClick={handleReset}
-                                disabled={!dirty || isSubmitting}
-                            >Reset</button>
-                        </>}
+            <Formik
+                initialValues={{ email: "" }}
+                onSubmit={async values => {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    alert(JSON.stringify(values, null, 2));
+                }}
+                validationSchema={Yup.object().shape({
+                    email: Yup.string()
+                        .email()
+                        .required("Required")
+                })}
+            >
+                {props => {
+                    const {
+                        values,
+                        touched,
+                        errors,
+                        dirty,
+                        isSubmitting,
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        handleReset
+                    } = props;
+                    return (
+                        <form onSubmit={handleSubmit}>
+                            <label htmlFor="email" style={{ display: "block" }}>
+                                Email
+                            </label>
+                            <Field
+                                name='email'
+                                component={MyInput}
+                                onChange={handleChange}
+                                value={values.email}
+                            />
 
-                        <button type="submit" disabled={isSubmitting}>
-                            Submit
-                        </button>
-                    </form>
-                );
-            }}
-        </Formik>
-    </div>
-);
+                            {
+                                (isNotEmpty(props.values.email)) &&
+                                <>
+                                    <button
+                                        type="button"
+                                        className="outline"
+                                        onClick={handleReset}
+                                        disabled={!dirty || isSubmitting}
+                                    >Reset</button>
+                                </>}
+
+                            <button type="submit" disabled={isSubmitting}>
+                                Submit
+                            </button>
+                        </form>
+                    );
+                }}
+            </Formik>
+        </div>
+    )
+};
